@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Vocabulary
+namespace VocabularyAPI
 {
     public class Program
     {
