@@ -12,7 +12,7 @@ namespace Model
 
         public Task<Entry> CreateEntryAsync(EntryCreateInfo createInfo, CancellationToken token);
 
-        public Task<EntryList> SearchEntriesAsync(EntrySearchInfo searchInfo, CancellationToken token);
+        public Task<EntryList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token);
 
         public Task UpdateEntryAsync(string lemma, EntryUpdateInfo updateInfo, CancellationToken token);
 

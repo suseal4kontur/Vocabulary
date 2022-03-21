@@ -45,7 +45,7 @@ namespace Model
             return entry;
         }
 
-        public async Task<EntryList> SearchEntriesAsync(EntrySearchInfo searchInfo, CancellationToken token)
+        public async Task<EntryList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token)
         {
             var builder = Builders<Entry>.Filter;
             var filter = builder.Empty;

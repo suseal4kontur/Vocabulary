@@ -3,7 +3,7 @@ using Model.Meanings;
 
 namespace Model.Entries
 {
-    public sealed class EntrySearchInfo
+    public sealed class EntriesSearchInfo
     {
         public PartOfSpeech? PartOfSpeech { get; set; }
 

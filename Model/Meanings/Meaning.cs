@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Model.Meanings
+﻿namespace Model.Meanings
 {
     public sealed class Meaning
     {
