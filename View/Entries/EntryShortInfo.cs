@@ -8,7 +8,7 @@ namespace View.Entries
     {
         public string Lemma { get; set; }
 
-        public IReadOnlyList<Meaning> Meanings { get; set; }
+        public IReadOnlyList<MeaningShortInfo> Meanings { get; set; }
 
         public DateTime AddedAt { get; set; }
     }

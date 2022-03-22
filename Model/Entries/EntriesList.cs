@@ -2,7 +2,7 @@
 
 namespace Model.Entries
 {
-    public sealed class EntryList
+    public sealed class EntriesList
     {
         public IReadOnlyList<Entry> Entries { get; set; }
 

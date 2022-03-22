@@ -1,4 +1,7 @@
-﻿namespace Model.Meanings
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Model.Meanings
 {
     public sealed class Meaning
     {

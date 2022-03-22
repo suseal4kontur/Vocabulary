@@ -33,6 +33,7 @@ namespace Model
         {
             var entry = new Entry
             {
+                Id = Guid.NewGuid().ToString(),
                 Lemma = createInfo.Lemma,
                 Meanings = GetMeanings(createInfo.Meanings),
                 Forms = createInfo.Forms ?? new string[] { createInfo.Lemma },
@@ -45,19 +46,19 @@ namespace Model
             return entry;
         }
 
-        public async Task<EntryList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token)
+        public async Task<EntriesList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token)
         {
             var builder = Builders<Entry>.Filter;
             var filter = builder.Empty;
 
             if (!string.IsNullOrEmpty(searchInfo.Form))
             {
-                filter &= builder.ElemMatch(e => e.Forms, searchInfo.Form);
+                filter &= builder.Where(e => e.Forms.Any(s => s == searchInfo.Form));
             }
 
             if (!string.IsNullOrEmpty(searchInfo.Synonym))
             {
-                filter &= builder.ElemMatch(e => e.Synonyms, searchInfo.Synonym);
+                filter &= builder.Where(e => e.Synonyms.Any(s => s == searchInfo.Synonym));
             }
 
             if (searchInfo.FromAddedAt != null)
@@ -83,7 +84,7 @@ namespace Model
                 .Skip(searchInfo.Offset)
                 .ToListAsync(token);
 
-            return new EntryList { Entries = entries, Total = total };
+            return new EntriesList { Entries = entries, Total = total };
         }
 
         public async Task UpdateEntryAsync(string lemma, EntryUpdateInfo updateInfo, CancellationToken token)
@@ -134,7 +135,7 @@ namespace Model
             return entry ?? throw new MeaningNotFoundException(meaningId);
         }
 
-        public async Task<Meaning> AddMeaningAsync(string lemma, MeaningCreateInfo createInfo, CancellationToken token)
+        public async Task<Meaning> CreateMeaningAsync(string lemma, MeaningCreateInfo createInfo, CancellationToken token)
         {
             var meaning = GetMeanings(new MeaningCreateInfo[] { createInfo })[0];
 

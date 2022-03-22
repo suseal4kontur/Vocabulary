@@ -4,10 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{E5203584-FA91-4CDC-80D5-F13700D61DAB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57723713-91DF-41EE-B1B3-EC67C4005B5B} = {57723713-91DF-41EE-B1B3-EC67C4005B5B}
+		{9CFF3EFC-1BDE-48EC-A5FC-AFA4E14BCB53} = {9CFF3EFC-1BDE-48EC-A5FC-AFA4E14BCB53}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{9CFF3EFC-1BDE-48EC-A5FC-AFA4E14BCB53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{57723713-91DF-41EE-B1B3-EC67C4005B5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "View", "View\View.csproj", "{57723713-91DF-41EE-B1B3-EC67C4005B5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

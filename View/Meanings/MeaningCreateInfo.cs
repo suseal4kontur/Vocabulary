@@ -7,10 +7,12 @@ namespace View.Meanings
     {
         [DataMember]
         [PartOfSpeech]
+        [Required]
         public string PartOfSpeech { get; set; }
 
         [DataMember]
         [StringLength(1000)]
+        [Required]
         public string Description { get; set; }
 
         [DataMember]

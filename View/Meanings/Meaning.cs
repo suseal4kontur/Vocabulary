@@ -4,8 +4,6 @@
     {
         public string Id { get; set; }
 
-        public string PartOfSpeech { get; set; }
-
         public string Example { get; set; }
     }
 }

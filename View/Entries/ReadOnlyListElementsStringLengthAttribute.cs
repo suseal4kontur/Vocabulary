@@ -14,11 +14,12 @@ namespace View.Entries
         {
             var collection = (IReadOnlyList<string>)value;
 
-            foreach (var element in collection)
-            {
-                if (element.Length > Length)
-                    return new ValidationResult($"String length must be not more than {Length}");
-            }
+            if (collection != null)
+                foreach (var element in collection)
+                {
+                    if (element.Length > Length)
+                        return new ValidationResult($"String length must be not more than {Length}");
+                }
 
             return ValidationResult.Success;
         }

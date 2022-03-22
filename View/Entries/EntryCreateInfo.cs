@@ -10,9 +10,11 @@ namespace View.Entries
     {
         [DataMember]
         [StringLength(30)]
+        [Required]
         public string Lemma { get; set; }
 
         [DataMember]
+        [Required]
         public IReadOnlyList<MeaningCreateInfo> Meanings { get; set; }
 
         [DataMember]
