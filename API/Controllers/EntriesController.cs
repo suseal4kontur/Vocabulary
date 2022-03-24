@@ -27,9 +27,9 @@ namespace VocabularyAPI.Controllers
                 var entry = await this.entriesService.GetEntryAsync(lemma, token).ConfigureAwait(false);
                 return this.Ok(entry);
             }
-            catch (EntryNotFoundException)
+            catch (EntryNotFoundException ex)
             {
-                return this.NotFound();
+                return this.NotFound(new ExceptionError(ex.Message));
             }
         }
 
@@ -52,7 +52,11 @@ namespace VocabularyAPI.Controllers
             }
             catch (ValidationException ex)
             {
-                return this.BadRequest(ex.ValidationResult);
+                return this.BadRequest(new ExceptionError(ex.Message));
+            }
+            catch (EntryAlreadyExistsException ex)
+            {
+                return this.BadRequest(new ExceptionError(ex.Message));
             }
         }
 
@@ -70,11 +74,11 @@ namespace VocabularyAPI.Controllers
             }
             catch (ValidationException ex)
             {
-                return this.BadRequest(ex.ValidationResult);
+                return this.BadRequest(new ExceptionError(ex.Message));
             }
-            catch (EntryNotFoundException)
+            catch (EntryNotFoundException ex)
             {
-                return this.NotFound();
+                return this.NotFound(new ExceptionError(ex.Message));
             }
         }
 
@@ -87,9 +91,9 @@ namespace VocabularyAPI.Controllers
                     .DeleteEntryAsync(lemma, token).ConfigureAwait(false);
                 return this.NoContent();
             }
-            catch (EntryNotFoundException)
+            catch (EntryNotFoundException ex)
             {
-                return this.NotFound();
+                return this.NotFound(new ExceptionError(ex.Message));
             }
         }
 
@@ -101,9 +105,9 @@ namespace VocabularyAPI.Controllers
                 var entry = await this.entriesService.GetEntryByMeaningAsync(meaningId, token).ConfigureAwait(false);
                 return this.Ok(entry);
             }
-            catch (MeaningNotFoundException)
+            catch (MeaningNotFoundException ex)
             {
-                return this.NotFound();
+                return this.NotFound(new ExceptionError(ex.Message));
             }
         }
     }

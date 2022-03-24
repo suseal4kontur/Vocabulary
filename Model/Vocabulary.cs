@@ -17,6 +17,8 @@ namespace Model
         public Vocabulary(IMongoCollection<Entry> entriesCollection)
         {
             this.entriesCollection = entriesCollection ?? throw new ArgumentNullException(nameof(entriesCollection));
+
+            InitializeFirstEntry();
         }
 
         public async Task<Entry> GetEntryAsync(string lemma, CancellationToken token)
@@ -31,19 +33,27 @@ namespace Model
 
         public async Task<Entry> CreateEntryAsync(EntryCreateInfo createInfo, CancellationToken token)
         {
-            var entry = new Entry
+            try 
+            { 
+                await GetEntryAsync(createInfo.Lemma, token);
+                throw new EntryAlreadyExistsException(createInfo.Lemma);
+            }
+            catch (EntryNotFoundException)
             {
-                Id = Guid.NewGuid().ToString(),
-                Lemma = createInfo.Lemma,
-                Meanings = GetMeanings(createInfo.Meanings),
-                Forms = createInfo.Forms ?? new string[] { createInfo.Lemma },
-                Synonyms = createInfo.Synonyms,
-                AddedAt = createInfo.AddedAt ?? DateTime.UtcNow
-            };
+                var entry = new Entry
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Lemma = createInfo.Lemma,
+                    Meanings = GetMeanings(createInfo.Meanings),
+                    Forms = createInfo.Forms ?? new string[] { createInfo.Lemma },
+                    Synonyms = createInfo.Synonyms,
+                    AddedAt = createInfo.AddedAt ?? DateTime.UtcNow
+                };
 
-            await this.entriesCollection.InsertOneAsync(entry, cancellationToken: token);
+                await this.entriesCollection.InsertOneAsync(entry, cancellationToken: token);
 
-            return entry;
+                return entry;
+            }
         }
 
         public async Task<EntriesList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token)
@@ -205,6 +215,34 @@ namespace Model
             if (updateResult.ModifiedCount == 0)
             {
                 throw new MeaningNotFoundException(meaningId);
+            }
+        }
+
+        private void InitializeFirstEntry()
+        {
+            if (this.entriesCollection
+                .Find(e => e.Lemma == "vocabulary")
+                .FirstOrDefaultAsync()
+                .GetAwaiter()
+                .GetResult() == null)
+            {
+                CreateEntryAsync(
+                        new EntryCreateInfo()
+                        {
+                            Lemma = "vocabulary",
+                            Meanings = new MeaningCreateInfo[]
+                            {
+                            new MeaningCreateInfo()
+                            {
+                                PartOfSpeech = PartOfSpeech.Noun,
+                                Description = "The body of words used in a particular language.",
+                                Example = "The term became part of business vocabulary."
+                            }
+                            }
+                        },
+                        CancellationToken.None)
+                    .GetAwaiter()
+                    .GetResult();
             }
         }
 

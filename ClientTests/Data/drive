@@ -1,0 +1,30 @@
+{
+  "lemma": "drive",
+  "meanings": [
+    {
+      "partOfSpeech": "Verb",
+      "description": "Propel or carry along by force in a specified direction.",
+      "example": "The wind will drive you onshore."
+    },
+    {
+      "partOfSpeech": "Verb",
+      "description": "Operate and control the direction and speed of a motor vehicle.",
+      "example": "He should get into his car and drive off."
+    },
+    {
+      "partOfSpeech": "Noun",
+      "description": "A trip or journey in a car.",
+      "example": "They went for a drive in the country."
+    }
+  ],
+  "forms": [
+    "drive",
+    "drove",
+    "driven"
+  ],
+  "synonyms": [
+    "operate",
+    "propel",
+    "trip"
+  ]
+}

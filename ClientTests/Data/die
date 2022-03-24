@@ -1,0 +1,19 @@
+{
+  "lemma": "die",
+  "meanings": [
+    {
+      "partOfSpeech": "Verb",
+      "description": "(Of a person, animal, or plant) stop living.",
+      "example": "The king died a violent death."
+    }
+  ],
+  "forms": [
+    "die",
+    "died",
+    "dying"
+  ],
+  "synonyms": [
+    "pass away"
+  ],
+  "addedAt": "2022-02-24T07:47:50.633Z"
+}

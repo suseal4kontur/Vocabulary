@@ -1,0 +1,19 @@
+{
+  "lemma": "enjoy",
+  "meanings": [
+    {
+      "partOfSpeech": "Verb",
+      "description": "Take delight or pleasure in (an activity or occasion).",
+      "example": "Joe enjoys reading Icelandic family sagas."
+    }
+  ],
+  "forms": [
+    "enjoy",
+    "enjoyed",
+    "enjoying"
+  ],
+  "synonyms": [
+    "have fun"
+  ],
+  "addedAt": "2021-03-24T07:47:50.633Z"
+}

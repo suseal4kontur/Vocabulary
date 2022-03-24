@@ -1,0 +1,25 @@
+{
+  "lemma": "purple",
+  "meanings": [
+    {
+      "partOfSpeech": "Noun",
+      "description": "A color intermediate between red and blue.",
+      "example": "The painting was mostly in shades of blue and purple."
+    },
+    {
+      "partOfSpeech": "Adjective",
+      "description": "Of a color intermediate between red and blue.",
+      "example": "It was a faded purple T-shirt."
+    },
+    {
+      "partOfSpeech": "Verb",
+      "description": "Become or make purple in color.",
+      "example": "Ed's cheeks purpled."
+    }
+  ],
+  "forms": [
+    "purple",
+    "purpled"
+  ],
+  "addedAt": "2022-03-22T07:47:50.633Z"
+}

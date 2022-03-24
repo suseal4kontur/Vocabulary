@@ -1,0 +1,29 @@
+{
+  "lemma": "play",
+  "meanings": [
+    {
+      "partOfSpeech": "Verb",
+      "description": "Engage in activity for enjoyment and recreation rather than a serious or practical purpose.",
+      "example": "The children were playing outside."
+    },
+    {
+      "partOfSpeech": "Verb",
+      "description": "Take part in (a sport).",
+      "example": "I play softball and tennis."
+    },
+    {
+      "partOfSpeech": "Noun",
+      "description": "Activity engaged in for enjoyment and recreation, especially by children.",
+      "example": "A child at play may use a stick as an airplane."
+    }
+  ],
+  "forms": [
+    "play",
+    "playing",
+    "played"
+  ],
+  "synonyms": [
+    "have fun",
+    "amusement"
+  ]
+}

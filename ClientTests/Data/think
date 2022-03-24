@@ -1,0 +1,18 @@
+{
+  "lemma": "think",
+  "meanings": [
+    {
+      "partOfSpeech": "verb",
+      "description": "Have a particular opinion, belief, or idea about someone or something.",
+      "example": "She thinks that nothing will be the same again."
+    }
+  ],
+  "forms": [
+    "think",
+    "thought"
+  ],
+  "synonyms": [
+    "believe"
+  ],
+  "addedAt": "2022-01-24T07:47:50.633Z"
+}
