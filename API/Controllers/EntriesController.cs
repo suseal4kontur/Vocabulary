@@ -12,9 +12,9 @@ namespace VocabularyAPI.Controllers
     [Route("entries")]
     public class EntriesController : ControllerBase
     {
-        private readonly EntriesService entriesService;
+        private readonly IEntriesService entriesService;
 
-        public EntriesController(EntriesService entriesService)
+        public EntriesController(IEntriesService entriesService)
         {
             this.entriesService = entriesService;
         }
@@ -92,20 +92,6 @@ namespace VocabularyAPI.Controllers
                 return this.NoContent();
             }
             catch (EntryNotFoundException ex)
-            {
-                return this.NotFound(new ExceptionError(ex.Message));
-            }
-        }
-
-        [HttpGet("{meaningId}/bymeaning")]
-        public async Task<ActionResult> GetEntryByMeaningAsync(string meaningId, CancellationToken token)
-        {
-            try
-            {
-                var entry = await this.entriesService.GetEntryByMeaningAsync(meaningId, token).ConfigureAwait(false);
-                return this.Ok(entry);
-            }
-            catch (MeaningNotFoundException ex)
             {
                 return this.NotFound(new ExceptionError(ex.Message));
             }

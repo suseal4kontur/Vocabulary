@@ -12,9 +12,9 @@ namespace VocabularyAPI.Controllers
     [Route("entries/{lemma}/meanings")]
     public sealed class MeaningsController : ControllerBase
     {
-        private readonly MeaningsService meaningsService;
+        private readonly IMeaningsService meaningsService;
 
-        public MeaningsController(MeaningsService meaningsService)
+        public MeaningsController(IMeaningsService meaningsService)
         {
             this.meaningsService = meaningsService;
         }

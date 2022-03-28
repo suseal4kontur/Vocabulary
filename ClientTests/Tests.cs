@@ -21,7 +21,7 @@ namespace ClientTests
         [OneTimeSetUp]
         public void Setup()
         {
-            vocabularyClient = new VocabularyClient();
+            vocabularyClient = new VocabularyClient("https://localhost:5001/");
             entriesCreateInfo = GetData();
         }
 

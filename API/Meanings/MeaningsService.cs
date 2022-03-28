@@ -9,7 +9,7 @@ using ModelMeanings = Model.Meanings;
 
 namespace VocabularyAPI.Meanings
 {
-    public sealed class MeaningsService
+    public sealed class MeaningsService : IMeaningsService
     {
         private readonly IVocabulary vocabulary;
         private readonly IMapper mapper;

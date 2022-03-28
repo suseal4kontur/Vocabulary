@@ -13,11 +13,11 @@ namespace Client
     {
         private readonly HttpClient httpClient;
 
-        public VocabularyClient()
+        public VocabularyClient(string uriString)
         {
             this.httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:5001/")
+                BaseAddress = new Uri(uriString)
             };
         }
 
@@ -114,7 +114,7 @@ namespace Client
 
         public async Task<ClientResult<Entry>> GetEntryByMeaningAsync(string meaningId)
         {
-            var response = await this.httpClient.GetAsync($"entries/{meaningId}/bymeaning");
+            var response = await this.httpClient.GetAsync($"entriesByMeaning/{meaningId}");
 
             var content = await response.Content.ReadAsStringAsync();
 

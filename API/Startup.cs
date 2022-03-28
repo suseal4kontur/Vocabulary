@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using VocabularyAPI.Mapping;
 using VocabularyAPI.Entries;
 using VocabularyAPI.Meanings;
+using VocabularyAPI.EntriesByMeaning;
 
 namespace VocabularyAPI
 {
@@ -33,7 +34,8 @@ namespace VocabularyAPI
 
             services.AddMapping()
                 .AddEntries()
-                .AddMeanings();
+                .AddMeanings()
+                .AddEntryByMeaning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,7 +10,7 @@ using ModelEntries = Model.Entries;
 
 namespace VocabularyAPI.Entries
 {
-    public sealed class EntriesService
+    public sealed class EntriesService : IEntriesService
     {
         private readonly IVocabulary vocabulary;
         private readonly IMapper mapper;
@@ -76,16 +76,6 @@ namespace VocabularyAPI.Entries
             await this.vocabulary.DeleteEntryAsync(lemma, token);
         }
 
-        public async Task<ViewEntries.Entry> GetEntryByMeaningAsync(
-            string meaningId,
-            CancellationToken token)
-        {
-            var modelEntry = await this.vocabulary.GetEntryByMeaningAsync(meaningId, token);
-
-            var viewEntry = this.mapper.Map<ModelEntries.Entry, ViewEntries.Entry>(modelEntry);
-            return viewEntry;
-        }
-
         private static void ValidateOnCreate(ModelEntries.EntryCreateInfo createInfo)
         {
             if (createInfo.Forms != null && !createInfo.Forms.Contains(createInfo.Lemma))
@@ -103,7 +93,7 @@ namespace VocabularyAPI.Entries
             if (updateInfo.Forms == null && updateInfo.Synonyms == null)
                 throw new ValidationException("Update info is empty.");
 
-            if (updateInfo.Forms!= null && !updateInfo.Forms.Contains(lemma))
+            if (updateInfo.Forms != null && !updateInfo.Forms.Contains(lemma))
                 throw new ValidationException("Forms must contain lemma.");
 
             if (updateInfo.Forms?.Count > updateInfo.Forms?.Distinct().Count())

@@ -33,27 +33,22 @@ namespace Model
 
         public async Task<Entry> CreateEntryAsync(EntryCreateInfo createInfo, CancellationToken token)
         {
-            try 
-            { 
-                await GetEntryAsync(createInfo.Lemma, token);
+            if (await DoesEntryByLemmaExistAsync(createInfo.Lemma, token))
                 throw new EntryAlreadyExistsException(createInfo.Lemma);
-            }
-            catch (EntryNotFoundException)
+
+            var entry = new Entry
             {
-                var entry = new Entry
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Lemma = createInfo.Lemma,
-                    Meanings = GetMeanings(createInfo.Meanings),
-                    Forms = createInfo.Forms ?? new string[] { createInfo.Lemma },
-                    Synonyms = createInfo.Synonyms,
-                    AddedAt = createInfo.AddedAt ?? DateTime.UtcNow
-                };
+                Id = Guid.NewGuid().ToString(),
+                Lemma = createInfo.Lemma,
+                Meanings = GetMeanings(createInfo.Meanings),
+                Forms = createInfo.Forms ?? new string[] { createInfo.Lemma },
+                Synonyms = createInfo.Synonyms,
+                AddedAt = createInfo.AddedAt ?? DateTime.UtcNow
+            };
 
-                await this.entriesCollection.InsertOneAsync(entry, cancellationToken: token);
+            await this.entriesCollection.InsertOneAsync(entry, cancellationToken: token);
 
-                return entry;
-            }
+            return entry;
         }
 
         public async Task<EntriesList> SearchEntriesAsync(EntriesSearchInfo searchInfo, CancellationToken token)
@@ -262,6 +257,13 @@ namespace Model
             }
 
             return meanings;
+        }
+
+        private async Task<bool> DoesEntryByLemmaExistAsync(string lemma, CancellationToken token)
+        {
+            var entry = await GetEntryAsync(lemma, token);
+
+            return entry != null;
         }
     }
 }

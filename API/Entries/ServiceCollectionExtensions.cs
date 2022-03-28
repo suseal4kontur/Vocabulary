@@ -20,7 +20,7 @@ namespace VocabularyAPI.Entries
                 return collection;
             });
             services.AddSingleton<IVocabulary, Vocabulary>();
-            services.AddSingleton<EntriesService>();
+            services.AddSingleton<IEntriesService, EntriesService>();
 
             return services;
         }

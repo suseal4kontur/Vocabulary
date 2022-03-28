@@ -6,7 +6,7 @@ namespace VocabularyAPI.Meanings
     {
         public static IServiceCollection AddMeanings(this IServiceCollection services)
         {
-            services.AddSingleton<MeaningsService>();
+            services.AddSingleton<IMeaningsService, MeaningsService>();
 
             return services;
         }
