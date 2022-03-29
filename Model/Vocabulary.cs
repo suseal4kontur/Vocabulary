@@ -23,17 +23,14 @@ namespace Model
 
         public async Task<Entry> GetEntryAsync(string lemma, CancellationToken token)
         {
-            var entry = await this.entriesCollection
-                .Find(e => e.Lemma == lemma)
-                .FirstOrDefaultAsync(token)
-                .ConfigureAwait(false);
+            var entry = await TryFindEntry(lemma, token);
 
             return entry ?? throw new EntryNotFoundException(lemma);
         }
 
         public async Task<Entry> CreateEntryAsync(EntryCreateInfo createInfo, CancellationToken token)
         {
-            if (await DoesEntryByLemmaExistAsync(createInfo.Lemma, token))
+            if (await TryFindEntry(createInfo.Lemma, token) != null)
                 throw new EntryAlreadyExistsException(createInfo.Lemma);
 
             var entry = new Entry
@@ -259,11 +256,12 @@ namespace Model
             return meanings;
         }
 
-        private async Task<bool> DoesEntryByLemmaExistAsync(string lemma, CancellationToken token)
+        private async Task<Entry> TryFindEntry(string lemma, CancellationToken token)
         {
-            var entry = await GetEntryAsync(lemma, token);
-
-            return entry != null;
+            return await this.entriesCollection
+                .Find(e => e.Lemma == lemma)
+                .FirstOrDefaultAsync(token)
+                .ConfigureAwait(false);
         }
     }
 }
