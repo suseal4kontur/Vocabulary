@@ -86,7 +86,7 @@ namespace Client
         public async Task<ClientResult> UpdateEntryAsync(string lemma, EntryUpdateInfo updateInfo)
         {
             var stringContent = new StringContent(JsonSerializer
-                .Serialize(updateInfo, typeof(EntryUpdateInfo)));
+                .Serialize(updateInfo, typeof(EntryUpdateInfo)), Encoding.UTF8, "application/json");
 
             var response = await httpClient.PatchAsync($"entries/{lemma}", stringContent);
 
@@ -129,7 +129,7 @@ namespace Client
         public async Task<ClientResult<Meaning>> CreateMeaningAsync(string lemma, MeaningCreateInfo createInfo)
         {
             var stringContent = new StringContent(JsonSerializer
-                .Serialize(createInfo, typeof(MeaningCreateInfo)));
+                .Serialize(createInfo, typeof(MeaningCreateInfo)), Encoding.UTF8, "application/json");
 
             var response = await httpClient.PostAsync($"entries/{lemma}/meanings/", stringContent);
 
@@ -149,7 +149,7 @@ namespace Client
             MeaningUpdateInfo updateInfo)
         {
             var stringContent = new StringContent(JsonSerializer
-                .Serialize(updateInfo, typeof(MeaningUpdateInfo)));
+                .Serialize(updateInfo, typeof(MeaningUpdateInfo)), Encoding.UTF8, "application/json");
 
             var response = await httpClient
                 .PatchAsync($"entries/{lemma}/meanings/{meaningId}", stringContent);

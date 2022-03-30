@@ -4,12 +4,9 @@ using System.Threading.Tasks;
 using Client;
 using View.Entries;
 using View.Meanings;
-using System.IO;
-using System.Collections.Generic;
-using System.Text.Json;
 using System;
 
-namespace ClientTests
+namespace ClientTests.Tests
 {
     [TestFixture]
     internal sealed class CreateEntryTests
@@ -17,7 +14,7 @@ namespace ClientTests
         private IVocabularyClient vocabularyClient;
         private IVocabularyCleaner vocabularyCleaner;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             vocabularyClient = new VocabularyClient("https://localhost:5001/");
@@ -36,6 +33,9 @@ namespace ClientTests
 
                 result.IsSuccessful().Should().BeTrue();
                 TestIfCreatedCorrectly(result.Response, createInfo);
+
+                (await this.vocabularyClient.GetEntryAsync(createInfo.Lemma))
+                    .IsSuccessful().Should().BeTrue();
             }
         }
 
@@ -110,6 +110,66 @@ namespace ClientTests
         }
 
         [Test]
+        public async Task CreateEntryWithRepeatingFormsTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo },
+                Forms = new string[] { "word", "words", "words" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithIncorrectSynonymsTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo },
+                Synonyms = new string[] { "word" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithRepeatingSynonymsTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo },
+                Synonyms = new string[] { "lemma", "lemma" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
         public async Task CreateEntryThatAlreadyExistsTest()
         {
             var meaningCreateInfo = new MeaningCreateInfo()
@@ -150,6 +210,12 @@ namespace ClientTests
             }
 
             createdEntry.Meanings.Should().BeEquivalentTo(createInfo.Meanings);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            vocabularyCleaner.DropEntries();
         }
     }
 }

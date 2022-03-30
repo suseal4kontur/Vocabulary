@@ -84,6 +84,10 @@ namespace VocabularyAPI.Controllers
             {
                 return this.NotFound(new ExceptionError(ex.Message));
             }
+            catch (SingleMeaningDeletionException ex)
+            {
+                return this.BadRequest(new ExceptionError(ex.Message));
+            }
             catch (MeaningNotFoundException ex)
             {
                 return this.NotFound(new ExceptionError(ex.Message));

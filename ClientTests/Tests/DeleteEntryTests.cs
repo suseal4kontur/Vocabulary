@@ -3,7 +3,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using Client;
 
-namespace ClientTests
+namespace ClientTests.Tests
 {
     [TestFixture]
     internal sealed class DeleteEntryTests
@@ -11,7 +11,7 @@ namespace ClientTests
         private IVocabularyClient vocabularyClient;
         private IVocabularyCleaner vocabularyCleaner;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             vocabularyClient = new VocabularyClient("https://localhost:5001/");
@@ -32,6 +32,9 @@ namespace ClientTests
                 var result = await this.vocabularyClient.DeleteEntryAsync(createInfo.Lemma);
 
                 result.IsSuccessful().Should().BeTrue();
+
+                (await this.vocabularyClient.GetEntryAsync(createInfo.Lemma))
+                    .IsSuccessful().Should().BeFalse();
             }
         }
 
@@ -43,6 +46,12 @@ namespace ClientTests
 
             result.IsSuccessful().Should().BeFalse();
             result.Error.Title.Should().Contain(lemma);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            vocabularyCleaner.DropEntries();
         }
     }
 }

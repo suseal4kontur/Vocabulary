@@ -3,7 +3,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using Client;
 
-namespace ClientTests
+namespace ClientTests.Tests
 {
     [TestFixture]
     internal sealed class GetEntryTests

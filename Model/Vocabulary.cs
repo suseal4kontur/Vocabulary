@@ -157,7 +157,8 @@ namespace Model
 
         public async Task UpdateMeaningAsync(string lemma, string meaningId, MeaningUpdateInfo updateInfo, CancellationToken token)
         {
-            await GetEntryAsync(lemma, token);
+            if (await TryFindEntry(lemma, token) == null)
+                throw new EntryNotFoundException(lemma);
 
             var updates = new List<UpdateDefinition<Entry>>();
 
@@ -193,7 +194,13 @@ namespace Model
 
         public async Task DeleteMeaningAsync(string lemma, string meaningId, CancellationToken token)
         {
-            await GetEntryAsync(lemma, token);
+            var entry = await TryFindEntry(lemma, token);
+
+            if (entry == null)
+                throw new EntryNotFoundException(lemma);
+
+            if (entry.Meanings.Count == 1)
+                throw new SingleMeaningDeletionException(meaningId);
 
             var update = Builders<Entry>.Update
                 .PullFilter(e => e.Meanings, Builders<Meaning>.Filter.Eq(m => m.Id, meaningId));

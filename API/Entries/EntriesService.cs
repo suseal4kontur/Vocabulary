@@ -86,6 +86,9 @@ namespace VocabularyAPI.Entries
 
             if (createInfo.Synonyms?.Count > createInfo.Synonyms?.Distinct().Count())
                 throw new ValidationException("All synonyms must be different.");
+
+            if (createInfo.Synonyms != null && createInfo.Synonyms.Contains(createInfo.Lemma))
+                throw new ValidationException("Synonyms must not contain lemma.");
         }
 
         private static void ValidateOnUpdate(ModelEntries.EntryUpdateInfo updateInfo, string lemma)
@@ -101,6 +104,9 @@ namespace VocabularyAPI.Entries
 
             if (updateInfo.Synonyms?.Count > updateInfo.Synonyms?.Distinct().Count())
                 throw new ValidationException("All synonyms must be different.");
+
+            if (updateInfo.Synonyms != null && updateInfo.Synonyms.Contains(lemma))
+                throw new ValidationException("Synonyms must not contain lemma.");
         }
     }
 }

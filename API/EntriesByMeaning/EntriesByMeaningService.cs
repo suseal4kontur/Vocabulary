@@ -18,6 +18,7 @@ namespace VocabularyAPI.EntriesByMeaning
             this.vocabulary = vocabulary ?? throw new ArgumentNullException(nameof(vocabulary));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
+
         public async Task<ViewEntries.Entry> GetEntryByMeaningAsync(
             string meaningId,
             CancellationToken token)

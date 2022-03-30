@@ -48,6 +48,7 @@ namespace ClientTests
                     {
                         new Meaning()
                         {
+                            Id = Guid.NewGuid().ToString(),
                             PartOfSpeech = PartOfSpeech.Noun,
                             Description = "The body of words used in a particular language.",
                             Example = "The term became part of business vocabulary."
