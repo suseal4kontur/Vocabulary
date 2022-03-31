@@ -5,6 +5,7 @@ using Client;
 using View.Entries;
 using View.Meanings;
 using System;
+using System.Text;
 
 namespace ClientTests.Tests
 {
@@ -40,7 +41,7 @@ namespace ClientTests.Tests
         }
 
         [Test]
-        public async Task CreateEntryWithIncorrectMeaning()
+        public async Task CreateEntryWithIncorrectMeaningTest()
         {
             var meaningCreateInfo = new MeaningCreateInfo()
             {
@@ -59,7 +60,7 @@ namespace ClientTests.Tests
         }
 
         [Test]
-        public async Task CreateEntryWithoutMeaning()
+        public async Task CreateEntryWithoutMeaningTest()
         {
             var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
             {
@@ -187,6 +188,129 @@ namespace ClientTests.Tests
 
             result.IsSuccessful().Should().BeFalse();
             result.Error.Title.Should().Contain("vocabulary");
+        }
+
+        [Test]
+        public async Task CreateEntryWithLongLemmaTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "fffffffffffffffffffffffffffffffffff"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "fffffffffffffffffffffffffffffffffff",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithIncorrectPartOfSpeechTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "fff",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithLongDescriptionTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('f', 1001);
+
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = stringBuilder.ToString(),
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithLongExampleTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("word ");
+            stringBuilder.Append('f', 100);
+
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = stringBuilder.ToString()
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithLongFormTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo },
+                Forms = new string[] { "word", "fffffffffffffffffffffffffffffffffff" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateEntryWithLongSynonymTest()
+        {
+            var meaningCreateInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Adverb",
+                Description = "word",
+                Example = "word"
+            };
+
+            var result = await this.vocabularyClient.CreateEntryAsync(new EntryCreateInfo()
+            {
+                Lemma = "word",
+                Meanings = new MeaningCreateInfo[] { meaningCreateInfo },
+                Synonyms = new string[] { "lemma", "fffffffffffffffffffffffffffffffffff" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
         }
 
         private static void TestIfCreatedCorrectly(Entry createdEntry, EntryCreateInfo createInfo)

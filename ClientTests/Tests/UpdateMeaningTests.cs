@@ -3,6 +3,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using Client;
 using View.Meanings;
+using System.Text;
 
 namespace ClientTests.Tests
 {
@@ -93,6 +94,67 @@ namespace ClientTests.Tests
                 PartOfSpeech = "Noun",
                 Description = "A new amazing API.",
                 Example = "Look at this API! It implements... something!"
+            };
+
+            var result = await this.vocabularyClient.UpdateMeaningAsync("vocabulary", meaningId, updateInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task UpdateMeaningWithIncorrectPartOfSpeechTest()
+        {
+            var meaningId = (await this.vocabularyClient.GetEntryAsync("vocabulary"))
+                .Response.Meanings[0].Id;
+
+            var updateInfo = new MeaningUpdateInfo()
+            {
+                PartOfSpeech = "fff",
+                Description = "A new amazing API.",
+                Example = "Look at this API! It implements a vocabulary!"
+            };
+
+            var result = await this.vocabularyClient.UpdateMeaningAsync("vocabulary", meaningId, updateInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task UpdateMeaningWithLongDescriptionTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('f', 1001);
+
+            var meaningId = (await this.vocabularyClient.GetEntryAsync("vocabulary"))
+                .Response.Meanings[0].Id;
+
+            var updateInfo = new MeaningUpdateInfo()
+            {
+                PartOfSpeech = "Noun",
+                Description = stringBuilder.ToString(),
+                Example = "Look at this API! It implements a vocabulary!"
+            };
+
+            var result = await this.vocabularyClient.UpdateMeaningAsync("vocabulary", meaningId, updateInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task UpdateMeaningWithLongExampleTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("vocabulary ");
+            stringBuilder.Append('f', 100);
+
+            var meaningId = (await this.vocabularyClient.GetEntryAsync("vocabulary"))
+                .Response.Meanings[0].Id;
+
+            var updateInfo = new MeaningUpdateInfo()
+            {
+                PartOfSpeech = "Noun",
+                Description = "A new amazing API.",
+                Example = stringBuilder.ToString()
             };
 
             var result = await this.vocabularyClient.UpdateMeaningAsync("vocabulary", meaningId, updateInfo);

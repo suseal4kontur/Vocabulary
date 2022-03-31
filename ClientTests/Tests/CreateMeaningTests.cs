@@ -3,6 +3,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using Client;
 using View.Meanings;
+using System.Text;
 
 namespace ClientTests.Tests
 {
@@ -64,6 +65,58 @@ namespace ClientTests.Tests
                 PartOfSpeech = "Noun",
                 Description = "A new amazing API.",
                 Example = "Look at this API! It implements... something!"
+            };
+
+            var result = await this.vocabularyClient.CreateMeaningAsync("vocabulary", createInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateMeaningWithIncorrectPartOfSpeechTest()
+        {
+            var createInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "fff",
+                Description = "A new amazing API.",
+                Example = "Look at this API! It implements a vocabulary!"
+            };
+
+            var result = await this.vocabularyClient.CreateMeaningAsync("vocabulary", createInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateMeaningWithLongDescriptionTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('f', 1001);
+
+            var createInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Noun",
+                Description = stringBuilder.ToString(),
+                Example = "Look at this API! It implements a vocabulary!"
+            };
+
+            var result = await this.vocabularyClient.CreateMeaningAsync("vocabulary", createInfo);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task CreateMeaningWithLongExampleTest()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("vocabulary ");
+            stringBuilder.Append('f', 100);
+
+            var createInfo = new MeaningCreateInfo()
+            {
+                PartOfSpeech = "Noun",
+                Description = "A new amazing API.",
+                Example = stringBuilder.ToString()
             };
 
             var result = await this.vocabularyClient.CreateMeaningAsync("vocabulary", createInfo);

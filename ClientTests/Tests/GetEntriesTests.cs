@@ -99,6 +99,7 @@ namespace ClientTests.Tests
 
             result.IsSuccessful().Should().BeTrue();
             result.Response.Entries.Should().HaveCount(8);
+            result.Response.Total.Should().Be(10);
         }
 
         [Test]
@@ -127,6 +128,51 @@ namespace ClientTests.Tests
                 entryShortInfo.Meanings.Should().Contain(m => m.PartOfSpeech == "Noun");
                 entryShortInfo.AddedAt.Should().NotBeBefore(System.DateTime.Today.ToUniversalTime());
             }
+        }
+
+        [Test]
+        public async Task GetEntriesWithIncorrectPartOfSpeechTest()
+        {
+            var result = await this.vocabularyClient.GetEntriesAsync(
+                partOfSpeech: "fff");
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task GetEntriesWithLongFormTest()
+        {
+            var result = await this.vocabularyClient.GetEntriesAsync(
+                form: "fffffffffffffffffffffffffffffffffff");
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task GetEntriesWithLongSynonymTest()
+        {
+            var result = await this.vocabularyClient.GetEntriesAsync(
+                synonym: "fffffffffffffffffffffffffffffffffff");
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task GetEntriesWithIncorrectLimitTest()
+        {
+            var result = await this.vocabularyClient.GetEntriesAsync(
+                limit: -3);
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task GetEntriesWithIncorrectOffsetTest()
+        {
+            var result = await this.vocabularyClient.GetEntriesAsync(
+                offset: -3);
+
+            result.IsSuccessful().Should().BeFalse();
         }
 
         [OneTimeTearDown]

@@ -140,6 +140,30 @@ namespace ClientTests.Tests
             result.IsSuccessful().Should().BeFalse();
         }
 
+        [Test]
+        public async Task UpdateEntryWithLongFormTest()
+        {
+
+            var result = await this.vocabularyClient.UpdateEntryAsync("vocabulary", new EntryUpdateInfo()
+            {
+                Forms = new string[] { "vocabulary", "fffffffffffffffffffffffffffffffffff" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
+        [Test]
+        public async Task UpdateEntryWithLongFSynonymTest()
+        {
+
+            var result = await this.vocabularyClient.UpdateEntryAsync("vocabulary", new EntryUpdateInfo()
+            {
+                Synonyms = new string[] { "dictionary", "fffffffffffffffffffffffffffffffffff" }
+            });
+
+            result.IsSuccessful().Should().BeFalse();
+        }
+
         [TearDown]
         public void TearDown()
         {
